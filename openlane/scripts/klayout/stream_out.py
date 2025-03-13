@@ -90,6 +90,13 @@ import click
     "input",
     type=click.Path(exists=True, file_okay=True, dir_okay=False),
 )
+@click.option(
+    "--conflict-resolution",
+    "conflict_resolution",
+    type=str,
+    default="RenameCell",
+    help="Cell conflict resolution handling.",
+)
 def stream_out(
     output: str,
     input_lefs: Tuple[str, ...],
@@ -100,6 +107,7 @@ def stream_out(
     seal_gds: Optional[str],
     design_name: str,
     input: str,
+    conflict_resolution: str,
 ):  # Load technology file
     try:
         tech = pya.Technology()
@@ -108,6 +116,32 @@ def stream_out(
         layout_options.lefdef_config.read_lef_with_def = False
         layout_options.lefdef_config.lef_files = list(input_lefs)
         layout_options.lefdef_config.map_file = lym
+
+        if conflict_resolution == "AddToCell":
+            layout_options.cell_conflict_resolution = (
+                pya.LoadLayoutOptions.CellConflictResolution.AddToCell
+            )
+        elif conflict_resolution == "OverwriteCell":
+            layout_options.cell_conflict_resolution = (
+                pya.LoadLayoutOptions.CellConflictResolution.OverwriteCell
+            )
+        elif conflict_resolution == "RenameCell":
+            layout_options.cell_conflict_resolution = (
+                pya.LoadLayoutOptions.CellConflictResolution.RenameCell
+            )
+        elif conflict_resolution == "SkipNewCell":
+            layout_options.cell_conflict_resolution = (
+                pya.LoadLayoutOptions.CellConflictResolution.SkipNewCell
+            )
+        else:
+            print(
+                f"[ERROR] Unknown conflict resolution: '{conflict_resolution}'.",
+                file=sys.stderr,
+            )
+
+        print(
+            f"[INFO] Using '{conflict_resolution}' for conflict resolution if a cell name conflict arises…"
+        )
 
         # Load def file
         main_layout = pya.Layout()
@@ -126,7 +160,7 @@ def stream_out(
         # Load in the gds to merge
         print("[INFO] Merging GDS files…")
         for gds in input_gds_files:
-            main_layout.read(gds)
+            main_layout.read(gds, layout_options)
 
         # Copy the top level only to a new layout
         print(f"[INFO] Copying top level cell '{design_name}'…")

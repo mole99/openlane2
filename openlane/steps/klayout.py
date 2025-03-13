@@ -20,7 +20,7 @@ import subprocess
 from os.path import abspath
 from base64 import b64encode
 from tempfile import NamedTemporaryFile
-from typing import Any, Dict, Optional, List, Sequence, Tuple, Union
+from typing import Any, Dict, Optional, List, Literal, Sequence, Tuple, Union
 
 from .step import ViewsUpdate, MetricsUpdate, Step, StepError, StepException
 
@@ -197,6 +197,17 @@ class StreamOut(KLayoutStep):
     inputs = [DesignFormat.DEF]
     outputs = [DesignFormat.GDS, DesignFormat.KLAYOUT_GDS]
 
+    config_vars = KLayoutStep.config_vars + [
+        Variable(
+            "KLAYOUT_CONFLICT_RESOLUTION",
+            Optional[
+                Literal["AddToCell", "OverwriteCell", "RenameCell", "SkipNewCell"]
+            ],
+            "Specifies the conflict resolution to use if a cell name conflict arises.",
+            default="RenameCell",
+        ),
+    ]
+
     def run(self, state_in: State, **kwargs) -> Tuple[ViewsUpdate, MetricsUpdate]:
         views_updates: ViewsUpdate = {}
 
@@ -219,6 +230,8 @@ class StreamOut(KLayoutStep):
                 abspath(klayout_gds_out),
                 "--top",
                 self.config["DESIGN_NAME"],
+                "--conflict-resolution",
+                self.config["KLAYOUT_CONFLICT_RESOLUTION"],
             ]
             + self.get_cli_args(include_lefs=True, include_gds=True),
             env=env,
@@ -616,7 +629,6 @@ class LVS(KLayoutStep):
             )
 
         return views_updates, metrics_updates
-
 
 @Step.factory.register()
 class OpenGUI(KLayoutStep):
