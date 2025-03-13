@@ -162,6 +162,13 @@ proc read_timing_info {args} {
         read_liberty -corner $corner_name $lib
     }
 
+    if { [info exists ::env(PAD_LIBS) ] } {
+        foreach lib $::env(PAD_LIBS) {
+            puts "Reading gpio pad timing for the '$corner_name' corner at '$lib'…"
+            read_liberty -corner $corner_name $lib
+        }
+    }
+
     if { [info exists ::env(EXTRA_LIBS) ] } {
         puts "Reading explicitly-specified extra libs for $corner_name…"
         foreach extra_lib $::env(EXTRA_LIBS) {
@@ -263,6 +270,13 @@ proc read_pnr_libs {args} {
             read_liberty -corner $corner_name $model
         }
 
+        if { [info exists ::env(PAD_LIBS) ] } {
+            foreach lib $::env(PAD_LIBS) {
+                puts "Reading gpio pad timing library for the '$corner_name' corner at '$lib'…"
+                read_liberty -corner $corner_name $lib
+            }
+        }
+
         if { [info exists ::env(EXTRA_LIBS) ] } {
             puts "Reading explicitly-specified extra libs for $corner_name…"
             foreach extra_lib $::env(EXTRA_LIBS) {
@@ -286,6 +300,12 @@ proc read_lefs {{tlef_key "TECH_LEF"}} {
     if { [info exist ::env(MACRO_LEFS)] } {
         foreach lef $::env(MACRO_LEFS) {
             puts "Reading macro LEF file at '$lef'…"
+            read_lef $lef
+        }
+    }
+    if { [info exist ::env(PAD_LEFS)] } {
+        foreach lef $::env(PAD_LEFS) {
+            puts "Reading gpio pad LEF file at '$lef'…"
             read_lef $lef
         }
     }

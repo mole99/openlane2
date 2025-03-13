@@ -50,6 +50,15 @@ proc read_extra_lef {} {
     }
 }
 
+proc read_pad_lef {} {
+    if { [info exist ::env(PAD_LEFS)] } {
+        foreach lef_file $::env(PAD_LEFS) {
+            puts "> lef read $lef_file"
+            lef read $lef_file
+        }
+    }
+}
+
 proc read_extra_gds {} {
     set old_rescale [gds rescale]
     set old_readonly [gds readonly]
@@ -86,6 +95,16 @@ proc read_macro_gds_blackbox {} {
 proc read_macro_gds {} {
     if { [info exist ::env(MACRO_GDS_FILES)] } {
         set gds_files_in $::env(MACRO_GDS_FILES)
+        foreach gds_file $gds_files_in {
+            puts "> gds read $gds_file"
+            gds read $gds_file
+        }
+    }
+}
+
+proc read_pad_gds {} {
+    if { [info exist ::env(PAD_GDS)] } {
+        set gds_files_in $::env(PAD_GDS)
         foreach gds_file $gds_files_in {
             puts "> gds read $gds_file"
             gds read $gds_file

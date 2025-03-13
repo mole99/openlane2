@@ -24,6 +24,12 @@ if { $::env(MAGIC_MACRO_STD_CELL_SOURCE) == "PDK" } {
 }
 
 read_extra_gds
+# annotate with lef
+read_extra_lef
+
+read_pad_gds
+# annotate with lef
+read_pad_lef
 
 load (NEWCELL)
 

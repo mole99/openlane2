@@ -162,13 +162,17 @@ class LVS(NetgenStep):
         spice_files = []
         if self.config["CELL_SPICE_MODELS"] is None:
             self.warn(
-                "This PDK does not appear to define any SPICE models. LVS will still run, but all cells will be black-boxed and the result may be inaccurate."
+                "This PDK does not appear to define any cell SPICE models. LVS will still run, but all cells will be black-boxed and the result may be inaccurate."
             )
         else:
             spice_files = self.config["CELL_SPICE_MODELS"].copy()
 
-        if pdk_spice_files := self.config.get("SPICE_MODELS"):
-            spice_files = pdk_spice_files.copy()
+        if self.config["PAD_SPICE_MODELS"] is None:
+            self.warn(
+                "This PDK does not appear to define any IO pad SPICE models. LVS will still run, but all cells will be black-boxed and the result may be inaccurate."
+            )
+        else:
+            spice_files += self.config["PAD_SPICE_MODELS"].copy()
 
         if extra_spice_files := self.config.get("EXTRA_SPICE_MODELS"):
             spice_files += extra_spice_files

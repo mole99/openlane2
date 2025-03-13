@@ -13,6 +13,12 @@ foreach cdl $::env(CELL_CDLS) {
     lappend masters $cdl
 }
 
+if { [info exist ::env(PAD_CDLS)] } {
+    foreach cdl $::env(PAD_CDLS) {
+        lappend masters $cdl
+    }
+}
+
 if { [info exist ::env(EXTRA_CDLS)] } {
     foreach cdl $::env(EXTRA_CDLS) {
         lappend masters $cdl

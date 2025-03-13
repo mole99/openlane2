@@ -122,6 +122,11 @@ class KLayoutStep(Step):
                     lef_args.append("--input-lef")
                     lef_args.append(abspath(lef))
 
+            if io_pad_lefs := self.config["PAD_LEFS"]:
+                for lef in io_pad_lefs:
+                    lef_args.append("--input-lef")
+                    lef_args.append(abspath(lef))
+
             result += lef_args
 
         if include_gds:
@@ -134,6 +139,10 @@ class KLayoutStep(Step):
                 gds_args.append(gds)
             if extra_gds := self.config["EXTRA_GDS"]:
                 for gds in extra_gds:
+                    gds_args.append("--with-gds-file")
+                    gds_args.append(gds)
+            if io_pads_gds := self.config["PAD_GDS"]:
+                for gds in io_pads_gds:
                     gds_args.append("--with-gds-file")
                     gds_args.append(gds)
             result += gds_args
@@ -562,6 +571,7 @@ class LVS(KLayoutStep):
             # Merge all CDL inputs
             cdl_lst = [input_view_cdl]
             cdl_lst.extend(self.config["CELL_CDLS"] or [])
+            cdl_lst.extend(self.config["PAD_CDLS"] or [])
             cdl_lst.extend(self.config["EXTRA_CDLS"] or [])
 
             for fn in cdl_lst:
@@ -629,6 +639,7 @@ class LVS(KLayoutStep):
             )
 
         return views_updates, metrics_updates
+
 
 @Step.factory.register()
 class OpenGUI(KLayoutStep):

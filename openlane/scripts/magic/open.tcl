@@ -20,6 +20,7 @@ if { $::env(MAGIC_GUI_USE_GDS) && [info exists ::env(CURRENT_GDS)] } {
     read_tech_lef
     read_pdk_lef
     read_macro_lef
+    read_pad_lef
     read_def
 }
 
