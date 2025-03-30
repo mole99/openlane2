@@ -1202,7 +1202,6 @@ class Padring(OpenROADStep):
     ]
 
     def get_script_path(self):
-        print(self.config["PAD_CFG"])
         return self.config["PAD_CFG"]
 
     def run(self, state_in: State, **kwargs) -> Tuple[ViewsUpdate, MetricsUpdate]:
@@ -1486,6 +1485,19 @@ class _GlobalPlacement(OpenROADStep):
                 "PL_KEEP_RESIZE_BELOW_OVERFLOW",
                 Optional[Decimal],
                 "Only applicable when PL_TIME_DRIVEN is enabled. When the overflow is below the set value, timing-driven iterations will retain the resizer changes instead of reverting them. Allowed values are 0 to 1. If not set, a nonzero default value from OpenROAD will be used",
+            ),
+            Variable(
+                "RSZ_DONT_TOUCH_RX",
+                str,
+                'A single regular expression designating nets or instances as "don\'t touch" by design repairs or resizer optimizations.',
+                default="$^",
+                deprecated_names=["UNBUFFER_NETS"],
+            ),
+            Variable(
+                "RSZ_DONT_TOUCH_LIST",
+                Optional[List[str]],
+                'A list of nets and instances as "don\'t touch" by design repairs or resizer optimizations.',
+                default=None,
             ),
         ]
     )

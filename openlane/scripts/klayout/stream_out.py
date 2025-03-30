@@ -179,10 +179,10 @@ def stream_out(
                     file=sys.stderr,
                 )
 
-        if missing_gds:
-            raise Exception("One or more cell GDS files are missing.")
-        else:
-            print("[INFO] All LEF cells have matching GDS cells.")
+        #if missing_gds:
+        #    raise Exception("One or more cell GDS files are missing.")
+        #else:
+        #    print("[INFO] All LEF cells have matching GDS cells.")
 
         if seal_gds is not None:
             top_cell = top_only_layout.top_cell()

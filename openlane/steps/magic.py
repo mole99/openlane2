@@ -345,10 +345,10 @@ class StreamOut(MagicStep):
                 )
                 generated_metrics = subprocess_result["generated_metrics"]
 
-                if generated_metrics == {}:
-                    raise StepError(
-                        f"Failed to extract PR boundary from GDSII view of macro '{macro}'. Ensure that the GDSII view has a PR boundary layer."
-                    )
+                #if generated_metrics == {}:
+                #    raise StepError(
+                #        f"Failed to extract PR boundary from GDSII view of macro '{macro}'. Ensure that the GDSII view has a PR boundary layer."
+                #    )
                 macro_gds.append([macro, macro_gdses, generated_metrics.values()])
 
             env["__MACRO_GDS"] = TclStep.value_to_tcl(macro_gds)

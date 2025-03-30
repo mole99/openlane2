@@ -93,6 +93,10 @@ proc read_macro_gds_blackbox {} {
 }
 
 proc read_macro_gds {} {
+    set old_rescale [gds rescale]
+    set old_readonly [gds readonly]
+    gds rescale false
+    gds readonly true
     if { [info exist ::env(MACRO_GDS_FILES)] } {
         set gds_files_in $::env(MACRO_GDS_FILES)
         foreach gds_file $gds_files_in {
@@ -100,9 +104,15 @@ proc read_macro_gds {} {
             gds read $gds_file
         }
     }
+    gds rescale $old_rescale
+    gds readonly $old_readonly
 }
 
 proc read_pad_gds {} {
+    set old_rescale [gds rescale]
+    set old_readonly [gds readonly]
+    gds rescale false
+    gds readonly true
     if { [info exist ::env(PAD_GDS)] } {
         set gds_files_in $::env(PAD_GDS)
         foreach gds_file $gds_files_in {
@@ -110,6 +120,8 @@ proc read_pad_gds {} {
             gds read $gds_file
         }
     }
+    gds rescale $old_rescale
+    gds readonly $old_readonly
 }
 
 proc read_pdk_lef {} {

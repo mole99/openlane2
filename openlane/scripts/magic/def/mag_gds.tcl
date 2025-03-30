@@ -16,17 +16,30 @@ drc off
 
 read_pdk_gds
 gds noduplicates true
+gds readonly true
 
+# read stdcells
+read_pdk_gds
+# annotate with lef
+read_pdk_lef
+
+# read macros
 if { $::env(MAGIC_MACRO_STD_CELL_SOURCE) == "PDK" } {
     read_macro_gds
+    # annotate with lef
+    read_macro_lef
 } else {
     read_macro_gds_blackbox
+    # annotate with lef
+    read_macro_lef
 }
 
+# read extras
 read_extra_gds
 # annotate with lef
 read_extra_lef
 
+# read pads
 read_pad_gds
 # annotate with lef
 read_pad_lef
