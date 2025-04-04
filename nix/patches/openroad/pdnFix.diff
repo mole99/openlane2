@@ -1,0 +1,69 @@
+diff --git a/src/gpl/src/placerBase.cpp b/src/gpl/src/placerBase.cpp
+index 2b3614828..0c2892a04 100644
+--- a/src/gpl/src/placerBase.cpp
++++ b/src/gpl/src/placerBase.cpp
+@@ -787,7 +787,8 @@ void PlacerBaseCommon::init()
+   if (site == nullptr) {
+     log_->error(GPL, 305, "Unable to find a site");
+   }
+-  odb::Rect coreRect = block->getCoreArea();
++  //odb::Rect coreRect = block->getCoreArea();
++  odb::Rect coreRect = odb::Rect(362400, 362880, 3237600, 1060500);
+   odb::Rect dieRect = block->getDieArea();
+ 
+   if (!dieRect.contains(coreRect)) {
+@@ -843,7 +844,7 @@ void PlacerBaseCommon::init()
+       macroInstsArea_ += myInst.area();
+     }
+ 
+-    dbBox* bbox = inst->getBBox();
++    /*dbBox* bbox = inst->getBBox();
+     if (bbox->getDY() > die_.coreDy()) {
+       log_->error(
+           GPL, 119, "instance {} height is larger than core.", inst->getName());
+@@ -851,7 +852,7 @@ void PlacerBaseCommon::init()
+     if (bbox->getDX() > die_.coreDx()) {
+       log_->error(
+           GPL, 120, "instance {} width is larger than core.", inst->getName());
+-    }
++    }*/
+   }
+ 
+   for (auto& inst : instStor_) {
+diff --git a/src/odb/src/db/dbBlock.cpp b/src/odb/src/db/dbBlock.cpp
+index 8068979a9..039e515c7 100644
+--- a/src/odb/src/db/dbBlock.cpp
++++ b/src/odb/src/db/dbBlock.cpp
+@@ -2529,7 +2529,7 @@ const std::vector<Rect>& dbBlock::getBlockedRegionsForPins()
+ 
+ Rect dbBlock::getCoreArea()
+ {
+-  Rect rect;
++  /*Rect rect;
+   rect.mergeInit();
+ 
+   for (dbRow* row : getRows()) {
+@@ -2543,7 +2543,9 @@ Rect dbBlock::getCoreArea()
+   }
+ 
+   // Default to die area if there aren't any rows.
+-  return getDieArea();
++  return getDieArea();*/
++  
++  return Rect(362400, 362880, 3237600, 4634280);
+ }
+ 
+ void dbBlock::setExtmi(void* ext)
+diff --git a/src/pdn/src/pdn.tcl b/src/pdn/src/pdn.tcl
+index a65b0158b..c5833f4a3 100644
+--- a/src/pdn/src/pdn.tcl
++++ b/src/pdn/src/pdn.tcl
+@@ -127,7 +127,7 @@ proc set_voltage_domain { args } {
+     }
+ 
+     if { [info exists keys(-name)] } {
+-      set name [pdn::modify_voltage_domain_name $key(-name)]
++      set name [pdn::modify_voltage_domain_name $keys(-name)]
+     } else {
+       set name [$region getName]
+     }

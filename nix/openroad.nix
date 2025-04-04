@@ -68,6 +68,7 @@ in
     patches = [
       ./patches/openroad/6743.patch
       ./patches/openroad/tclFix.diff
+      ./patches/openroad/pdnFix.diff
     ];
 
     cmakeFlagsAll = [
