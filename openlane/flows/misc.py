@@ -52,6 +52,22 @@ class OpenInOpenROAD(SequentialFlow):
 
     Steps = [OpenROAD.OpenGUI]
 
+@Flow.factory.register()
+class NewOpenInOpenROAD(SequentialFlow):
+    """
+    This 'flow' actually just has one step that opens the ODB from
+    the initial state object in OpenROAD.
+
+    Intended for use with run tags that have already been run with
+    another flow, i.e. ::
+
+      openlane [...]
+      openlane --last-run --flow OpenInOpenROAD [...]
+    """
+
+    name = "Opening in OpenROAD with SPEF"
+
+    Steps = [OpenROAD.OpenGUIWithSPEF]
 
 @Flow.factory.register()
 class OpenInMagic(SequentialFlow):

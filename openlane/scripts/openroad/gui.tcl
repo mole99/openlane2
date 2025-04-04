@@ -13,3 +13,4 @@
 # limitations under the License.
 source $::env(SCRIPTS_DIR)/openroad/common/io.tcl
 read_current_odb
+read_spefs

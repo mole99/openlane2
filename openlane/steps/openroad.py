@@ -2811,7 +2811,6 @@ class DEFtoODB(OpenROADStep):
     def get_script_path(self) -> str:
         return os.path.join(get_script_dir(), "openroad", "write_views.tcl")
 
-
 @Step.factory.register()
 class OpenGUI(Step):
     """
@@ -2840,6 +2839,22 @@ class OpenGUI(Step):
             )
 
         return {}, {}
+
+@Step.factory.register()
+class OpenGUIWithSPEF(OpenROADStep):
+    """
+    Opens the ODB view in the OpenROAD GUI. Useful to inspect some parameters,
+    such as routing density and whatnot.
+    """
+
+    id = "OpenROAD.OpenGUIWithSPEF"
+    name = "Open In GUI"
+
+    inputs = [DesignFormat.ODB, DesignFormat.SPEF]
+    outputs = []
+        
+    def get_script_path(self) -> str:
+        return os.path.join(get_script_dir(), "openroad", "gui.tcl")
 
 
 @Step.factory.register()
